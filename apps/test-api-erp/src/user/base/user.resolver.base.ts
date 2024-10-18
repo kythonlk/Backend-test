@@ -26,6 +26,14 @@ import { UserFindUniqueArgs } from "./UserFindUniqueArgs";
 import { CreateUserArgs } from "./CreateUserArgs";
 import { UpdateUserArgs } from "./UpdateUserArgs";
 import { DeleteUserArgs } from "./DeleteUserArgs";
+import { FinancialFindManyArgs } from "../../financial/base/FinancialFindManyArgs";
+import { Financial } from "../../financial/base/Financial";
+import { InventoryFindManyArgs } from "../../inventory/base/InventoryFindManyArgs";
+import { Inventory } from "../../inventory/base/Inventory";
+import { PurchasingFindManyArgs } from "../../purchasing/base/PurchasingFindManyArgs";
+import { Purchasing } from "../../purchasing/base/Purchasing";
+import { SalesFindManyArgs } from "../../sales/base/SalesFindManyArgs";
+import { Sales } from "../../sales/base/Sales";
 import { UserService } from "../user.service";
 @common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
 @graphql.Resolver(() => User)
@@ -130,5 +138,85 @@ export class UserResolverBase {
       }
       throw error;
     }
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @graphql.ResolveField(() => [Financial], { name: "financials" })
+  @nestAccessControl.UseRoles({
+    resource: "Financial",
+    action: "read",
+    possession: "any",
+  })
+  async findFinancials(
+    @graphql.Parent() parent: User,
+    @graphql.Args() args: FinancialFindManyArgs
+  ): Promise<Financial[]> {
+    const results = await this.service.findFinancials(parent.id, args);
+
+    if (!results) {
+      return [];
+    }
+
+    return results;
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @graphql.ResolveField(() => [Inventory], { name: "inventories" })
+  @nestAccessControl.UseRoles({
+    resource: "Inventory",
+    action: "read",
+    possession: "any",
+  })
+  async findInventories(
+    @graphql.Parent() parent: User,
+    @graphql.Args() args: InventoryFindManyArgs
+  ): Promise<Inventory[]> {
+    const results = await this.service.findInventories(parent.id, args);
+
+    if (!results) {
+      return [];
+    }
+
+    return results;
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @graphql.ResolveField(() => [Purchasing], { name: "purchasings" })
+  @nestAccessControl.UseRoles({
+    resource: "Purchasing",
+    action: "read",
+    possession: "any",
+  })
+  async findPurchasings(
+    @graphql.Parent() parent: User,
+    @graphql.Args() args: PurchasingFindManyArgs
+  ): Promise<Purchasing[]> {
+    const results = await this.service.findPurchasings(parent.id, args);
+
+    if (!results) {
+      return [];
+    }
+
+    return results;
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @graphql.ResolveField(() => [Sales], { name: "salesItems" })
+  @nestAccessControl.UseRoles({
+    resource: "Sales",
+    action: "read",
+    possession: "any",
+  })
+  async findSalesItems(
+    @graphql.Parent() parent: User,
+    @graphql.Args() args: SalesFindManyArgs
+  ): Promise<Sales[]> {
+    const results = await this.service.findSalesItems(parent.id, args);
+
+    if (!results) {
+      return [];
+    }
+
+    return results;
   }
 }
