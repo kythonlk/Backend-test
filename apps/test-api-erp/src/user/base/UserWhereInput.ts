@@ -13,8 +13,12 @@ import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { StringNullableFilter } from "../../util/StringNullableFilter";
 import { Type } from "class-transformer";
-import { IsOptional } from "class-validator";
+import { IsOptional, ValidateNested } from "class-validator";
+import { FinancialListRelationFilter } from "../../financial/base/FinancialListRelationFilter";
 import { StringFilter } from "../../util/StringFilter";
+import { InventoryListRelationFilter } from "../../inventory/base/InventoryListRelationFilter";
+import { PurchasingListRelationFilter } from "../../purchasing/base/PurchasingListRelationFilter";
+import { SalesListRelationFilter } from "../../sales/base/SalesListRelationFilter";
 
 @InputType()
 class UserWhereInput {
@@ -28,6 +32,18 @@ class UserWhereInput {
     nullable: true,
   })
   email?: StringNullableFilter;
+
+  @ApiProperty({
+    required: false,
+    type: () => FinancialListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => FinancialListRelationFilter)
+  @IsOptional()
+  @Field(() => FinancialListRelationFilter, {
+    nullable: true,
+  })
+  financials?: FinancialListRelationFilter;
 
   @ApiProperty({
     required: false,
@@ -53,6 +69,18 @@ class UserWhereInput {
 
   @ApiProperty({
     required: false,
+    type: () => InventoryListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => InventoryListRelationFilter)
+  @IsOptional()
+  @Field(() => InventoryListRelationFilter, {
+    nullable: true,
+  })
+  inventories?: InventoryListRelationFilter;
+
+  @ApiProperty({
+    required: false,
     type: StringNullableFilter,
   })
   @Type(() => StringNullableFilter)
@@ -61,6 +89,30 @@ class UserWhereInput {
     nullable: true,
   })
   lastName?: StringNullableFilter;
+
+  @ApiProperty({
+    required: false,
+    type: () => PurchasingListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => PurchasingListRelationFilter)
+  @IsOptional()
+  @Field(() => PurchasingListRelationFilter, {
+    nullable: true,
+  })
+  purchasings?: PurchasingListRelationFilter;
+
+  @ApiProperty({
+    required: false,
+    type: () => SalesListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => SalesListRelationFilter)
+  @IsOptional()
+  @Field(() => SalesListRelationFilter, {
+    nullable: true,
+  })
+  salesItems?: SalesListRelationFilter;
 
   @ApiProperty({
     required: false,

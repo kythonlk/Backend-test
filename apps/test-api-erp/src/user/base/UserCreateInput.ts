@@ -11,10 +11,20 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsOptional, MaxLength } from "class-validator";
+import {
+  IsString,
+  IsOptional,
+  ValidateNested,
+  MaxLength,
+} from "class-validator";
+import { FinancialCreateNestedManyWithoutUsersInput } from "./FinancialCreateNestedManyWithoutUsersInput";
+import { Type } from "class-transformer";
+import { InventoryCreateNestedManyWithoutUsersInput } from "./InventoryCreateNestedManyWithoutUsersInput";
+import { PurchasingCreateNestedManyWithoutUsersInput } from "./PurchasingCreateNestedManyWithoutUsersInput";
 import { IsJSONValue } from "../../validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { InputJsonValue } from "../../types";
+import { SalesCreateNestedManyWithoutUsersInput } from "./SalesCreateNestedManyWithoutUsersInput";
 
 @InputType()
 class UserCreateInput {
@@ -31,6 +41,18 @@ class UserCreateInput {
 
   @ApiProperty({
     required: false,
+    type: () => FinancialCreateNestedManyWithoutUsersInput,
+  })
+  @ValidateNested()
+  @Type(() => FinancialCreateNestedManyWithoutUsersInput)
+  @IsOptional()
+  @Field(() => FinancialCreateNestedManyWithoutUsersInput, {
+    nullable: true,
+  })
+  financials?: FinancialCreateNestedManyWithoutUsersInput;
+
+  @ApiProperty({
+    required: false,
     type: String,
   })
   @IsString()
@@ -40,6 +62,18 @@ class UserCreateInput {
     nullable: true,
   })
   firstName?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => InventoryCreateNestedManyWithoutUsersInput,
+  })
+  @ValidateNested()
+  @Type(() => InventoryCreateNestedManyWithoutUsersInput)
+  @IsOptional()
+  @Field(() => InventoryCreateNestedManyWithoutUsersInput, {
+    nullable: true,
+  })
+  inventories?: InventoryCreateNestedManyWithoutUsersInput;
 
   @ApiProperty({
     required: false,
@@ -62,11 +96,35 @@ class UserCreateInput {
   password!: string;
 
   @ApiProperty({
+    required: false,
+    type: () => PurchasingCreateNestedManyWithoutUsersInput,
+  })
+  @ValidateNested()
+  @Type(() => PurchasingCreateNestedManyWithoutUsersInput)
+  @IsOptional()
+  @Field(() => PurchasingCreateNestedManyWithoutUsersInput, {
+    nullable: true,
+  })
+  purchasings?: PurchasingCreateNestedManyWithoutUsersInput;
+
+  @ApiProperty({
     required: true,
   })
   @IsJSONValue()
   @Field(() => GraphQLJSON)
   roles!: InputJsonValue;
+
+  @ApiProperty({
+    required: false,
+    type: () => SalesCreateNestedManyWithoutUsersInput,
+  })
+  @ValidateNested()
+  @Type(() => SalesCreateNestedManyWithoutUsersInput)
+  @IsOptional()
+  @Field(() => SalesCreateNestedManyWithoutUsersInput, {
+    nullable: true,
+  })
+  salesItems?: SalesCreateNestedManyWithoutUsersInput;
 
   @ApiProperty({
     required: true,

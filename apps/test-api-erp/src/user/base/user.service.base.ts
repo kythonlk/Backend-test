@@ -10,7 +10,16 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
-import { Prisma, User as PrismaUser } from "@prisma/client";
+
+import {
+  Prisma,
+  User as PrismaUser,
+  Financial as PrismaFinancial,
+  Inventory as PrismaInventory,
+  Purchasing as PrismaPurchasing,
+  Sales as PrismaSales,
+} from "@prisma/client";
+
 import { PasswordService } from "../../auth/password.service";
 import { transformStringFieldUpdateInput } from "../../prisma.util";
 
@@ -58,5 +67,49 @@ export class UserServiceBase {
   }
   async deleteUser(args: Prisma.UserDeleteArgs): Promise<PrismaUser> {
     return this.prisma.user.delete(args);
+  }
+
+  async findFinancials(
+    parentId: string,
+    args: Prisma.FinancialFindManyArgs
+  ): Promise<PrismaFinancial[]> {
+    return this.prisma.user
+      .findUniqueOrThrow({
+        where: { id: parentId },
+      })
+      .financials(args);
+  }
+
+  async findInventories(
+    parentId: string,
+    args: Prisma.InventoryFindManyArgs
+  ): Promise<PrismaInventory[]> {
+    return this.prisma.user
+      .findUniqueOrThrow({
+        where: { id: parentId },
+      })
+      .inventories(args);
+  }
+
+  async findPurchasings(
+    parentId: string,
+    args: Prisma.PurchasingFindManyArgs
+  ): Promise<PrismaPurchasing[]> {
+    return this.prisma.user
+      .findUniqueOrThrow({
+        where: { id: parentId },
+      })
+      .purchasings(args);
+  }
+
+  async findSalesItems(
+    parentId: string,
+    args: Prisma.SalesFindManyArgs
+  ): Promise<PrismaSales[]> {
+    return this.prisma.user
+      .findUniqueOrThrow({
+        where: { id: parentId },
+      })
+      .salesItems(args);
   }
 }

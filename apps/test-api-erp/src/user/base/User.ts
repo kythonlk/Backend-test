@@ -11,11 +11,21 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDate, IsString, IsOptional, MaxLength } from "class-validator";
+import {
+  IsDate,
+  IsString,
+  IsOptional,
+  ValidateNested,
+  MaxLength,
+} from "class-validator";
 import { Type } from "class-transformer";
+import { Financial } from "../../financial/base/Financial";
+import { Inventory } from "../../inventory/base/Inventory";
+import { Purchasing } from "../../purchasing/base/Purchasing";
 import { IsJSONValue } from "../../validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { JsonValue } from "type-fest";
+import { Sales } from "../../sales/base/Sales";
 
 @ObjectType()
 class User {
@@ -40,6 +50,15 @@ class User {
 
   @ApiProperty({
     required: false,
+    type: () => [Financial],
+  })
+  @ValidateNested()
+  @Type(() => Financial)
+  @IsOptional()
+  financials?: Array<Financial>;
+
+  @ApiProperty({
+    required: false,
     type: String,
   })
   @IsString()
@@ -60,6 +79,15 @@ class User {
 
   @ApiProperty({
     required: false,
+    type: () => [Inventory],
+  })
+  @ValidateNested()
+  @Type(() => Inventory)
+  @IsOptional()
+  inventories?: Array<Inventory>;
+
+  @ApiProperty({
+    required: false,
     type: String,
   })
   @IsString()
@@ -71,11 +99,29 @@ class User {
   lastName!: string | null;
 
   @ApiProperty({
+    required: false,
+    type: () => [Purchasing],
+  })
+  @ValidateNested()
+  @Type(() => Purchasing)
+  @IsOptional()
+  purchasings?: Array<Purchasing>;
+
+  @ApiProperty({
     required: true,
   })
   @IsJSONValue()
   @Field(() => GraphQLJSON)
   roles!: JsonValue;
+
+  @ApiProperty({
+    required: false,
+    type: () => [Sales],
+  })
+  @ValidateNested()
+  @Type(() => Sales)
+  @IsOptional()
+  salesItems?: Array<Sales>;
 
   @ApiProperty({
     required: true,

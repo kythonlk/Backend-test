@@ -11,10 +11,20 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsOptional, MaxLength } from "class-validator";
+import {
+  IsString,
+  IsOptional,
+  ValidateNested,
+  MaxLength,
+} from "class-validator";
+import { FinancialUpdateManyWithoutUsersInput } from "./FinancialUpdateManyWithoutUsersInput";
+import { Type } from "class-transformer";
+import { InventoryUpdateManyWithoutUsersInput } from "./InventoryUpdateManyWithoutUsersInput";
+import { PurchasingUpdateManyWithoutUsersInput } from "./PurchasingUpdateManyWithoutUsersInput";
 import { IsJSONValue } from "../../validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { InputJsonValue } from "../../types";
+import { SalesUpdateManyWithoutUsersInput } from "./SalesUpdateManyWithoutUsersInput";
 
 @InputType()
 class UserUpdateInput {
@@ -31,6 +41,18 @@ class UserUpdateInput {
 
   @ApiProperty({
     required: false,
+    type: () => FinancialUpdateManyWithoutUsersInput,
+  })
+  @ValidateNested()
+  @Type(() => FinancialUpdateManyWithoutUsersInput)
+  @IsOptional()
+  @Field(() => FinancialUpdateManyWithoutUsersInput, {
+    nullable: true,
+  })
+  financials?: FinancialUpdateManyWithoutUsersInput;
+
+  @ApiProperty({
+    required: false,
     type: String,
   })
   @IsString()
@@ -40,6 +62,18 @@ class UserUpdateInput {
     nullable: true,
   })
   firstName?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => InventoryUpdateManyWithoutUsersInput,
+  })
+  @ValidateNested()
+  @Type(() => InventoryUpdateManyWithoutUsersInput)
+  @IsOptional()
+  @Field(() => InventoryUpdateManyWithoutUsersInput, {
+    nullable: true,
+  })
+  inventories?: InventoryUpdateManyWithoutUsersInput;
 
   @ApiProperty({
     required: false,
@@ -66,6 +100,18 @@ class UserUpdateInput {
 
   @ApiProperty({
     required: false,
+    type: () => PurchasingUpdateManyWithoutUsersInput,
+  })
+  @ValidateNested()
+  @Type(() => PurchasingUpdateManyWithoutUsersInput)
+  @IsOptional()
+  @Field(() => PurchasingUpdateManyWithoutUsersInput, {
+    nullable: true,
+  })
+  purchasings?: PurchasingUpdateManyWithoutUsersInput;
+
+  @ApiProperty({
+    required: false,
   })
   @IsJSONValue()
   @IsOptional()
@@ -73,6 +119,18 @@ class UserUpdateInput {
     nullable: true,
   })
   roles?: InputJsonValue;
+
+  @ApiProperty({
+    required: false,
+    type: () => SalesUpdateManyWithoutUsersInput,
+  })
+  @ValidateNested()
+  @Type(() => SalesUpdateManyWithoutUsersInput)
+  @IsOptional()
+  @Field(() => SalesUpdateManyWithoutUsersInput, {
+    nullable: true,
+  })
+  salesItems?: SalesUpdateManyWithoutUsersInput;
 
   @ApiProperty({
     required: false,
